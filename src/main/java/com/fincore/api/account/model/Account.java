@@ -34,6 +34,17 @@ public class Account {
     }
 
 
+    public void updateBalance(BigDecimal newBalance) {
+        if (newBalance == null) {
+            throw new IllegalArgumentException(
+                    "O saldo nao pode ser nulo"
+            );
+        }
+
+        this.balance = newBalance;
+    }
+
+
     protected Account() {
         // Construtor utilizado pelo Hibernate
     }
