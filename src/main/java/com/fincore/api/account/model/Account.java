@@ -27,6 +27,13 @@ public class Account {
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal balance;
 
+
+    public void update(String name, AccountType type) {
+        this.name = name;
+        this.type = type;
+    }
+
+
     protected Account() {
         // Construtor utilizado pelo Hibernate
     }
