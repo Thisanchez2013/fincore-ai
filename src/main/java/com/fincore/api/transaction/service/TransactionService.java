@@ -17,6 +17,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.fincore.api.transaction.model.TransactionType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class TransactionService {
 
@@ -121,4 +125,38 @@ public class TransactionService {
                         "Transacao nao encontrada"
                 ));
     }
+
+
+    @Transactional(readOnly = true)
+    public Page<Transaction> findAll(
+            UUID accountId,
+            TransactionType type,
+            Pageable pageable
+    ) {
+
+        if (accountId != null && type != null) {
+            return repository.findByAccountIdAndType(
+                    accountId,
+                    type,
+                    pageable
+            );
+        }
+
+        if (accountId != null) {
+            return repository.findByAccountId(
+                    accountId,
+                    pageable
+            );
+        }
+
+        if (type != null) {
+            return repository.findByType(
+                    type,
+                    pageable
+            );
+        }
+
+        return repository.findAll(pageable);
+    }
+
 }

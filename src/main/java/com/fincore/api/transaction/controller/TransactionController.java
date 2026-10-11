@@ -13,6 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import com.fincore.api.transaction.model.TransactionType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.server.ResponseStatusException;
+
 @RestController
 @RequestMapping("/api/v1/transactions")
 public class TransactionController {
@@ -36,13 +43,32 @@ public class TransactionController {
     }
 
     // Listar todas as transacoes
+
     @GetMapping
-    public List<TransactionResponse> findAll() {
-        return service.findAll()
-                .stream()
-                .map(TransactionResponse::from)
-                .toList();
+    public Page<TransactionResponse> findAll(
+            @RequestParam(required = false) UUID accountId,
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        if (page < 0 || size < 1 || size > 100) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Pagina ou tamanho invalido"
+            );
+        }
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+
+        return service.findAll(accountId, type, pageable)
+                .map(TransactionResponse::from);
     }
+
 
     // Buscar uma transacao pelo ID
     @GetMapping("/{id}")
