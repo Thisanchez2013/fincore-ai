@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/transactions")
 public class TransactionController {
@@ -33,7 +35,7 @@ public class TransactionController {
     // Criar uma transacao financeira
     @PostMapping
     public ResponseEntity<TransactionResponse> create(
-            @RequestBody CreateTransactionRequest request
+            @Valid @RequestBody CreateTransactionRequest request
     ) {
         Transaction transaction = service.create(request);
 
@@ -41,6 +43,7 @@ public class TransactionController {
                 .status(HttpStatus.CREATED)
                 .body(TransactionResponse.from(transaction));
     }
+
 
     // Listar todas as transacoes
 

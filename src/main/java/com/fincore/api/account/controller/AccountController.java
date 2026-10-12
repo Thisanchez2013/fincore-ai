@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
@@ -26,7 +28,7 @@ public class AccountController {
     // Criar uma nova conta
     @PostMapping
     public ResponseEntity<Account> create(
-            @RequestBody CreateAccountRequest request
+           @Valid @RequestBody CreateAccountRequest request
     ) {
         Account account = service.create(request);
 
@@ -51,12 +53,13 @@ public class AccountController {
     @PutMapping("/{id}")
     public ResponseEntity<Account> update(
             @PathVariable UUID id,
-            @RequestBody UpdateAccountRequest request
+            @Valid @RequestBody UpdateAccountRequest request
     ) {
         Account updatedAccount = service.update(id, request);
 
         return ResponseEntity.ok(updatedAccount);
     }
+
 
 
     @DeleteMapping("/{id}")
