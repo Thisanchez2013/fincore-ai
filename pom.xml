@@ -65,6 +65,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Testes unitarios com JUnit 5 e Mockito -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
